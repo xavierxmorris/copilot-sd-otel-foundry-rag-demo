@@ -122,7 +122,8 @@ Prepare a greenfield TypeScript/Express financial-services RAG-style Q&A demo fo
 - `azd up --no-prompt` initially failed because the Key Vault template explicitly set `enablePurgeProtection: false`, which the target Azure environment rejected.
 - Updated `infra/resources.bicep` to omit the explicit false purge-protection setting and reran validation/deployment.
 - `az bicep build --file infra\main.bicep` passed after the Key Vault fix.
-- `azd up --no-prompt` completed successfully in subscription `51eb709f-8958-49c4-a547-ebdbd4bf66dc`, region `eastus2`, environment `dev`.
+- A subsequent `azd up --no-prompt` attempt hit `DeploymentActive` while the previous ARM deployment was still running. I waited for `resources-dev-fsirag` to finish, and it reached `Succeeded`.
+- `azd deploy --no-prompt` then deployed the API container image successfully in subscription `51eb709f-8958-49c4-a547-ebdbd4bf66dc`, region `eastus2`, environment `dev`.
 - Resource group: `rg-dev-fsirag`.
 - Container App endpoint: `https://ca-fsirag-gjbwsv.whitecoast-575f31b7.eastus2.azurecontainerapps.io`.
 - `azd show` listed the deployed `api` service endpoint.
