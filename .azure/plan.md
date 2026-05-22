@@ -1,6 +1,6 @@
 # Azure Deployment Preparation Plan
 
-Status: Validated
+Status: Deployed
 
 ## Summary
 
@@ -117,4 +117,14 @@ Prepare a greenfield TypeScript/Express financial-services RAG-style Q&A demo fo
   - `GET /health`
   - `npm run seed:demo`, including expected `SLOW-500` HTTP 500 demo error path.
 
-Deployment was not executed. Use azure-deploy before running any deployment command.
+## Deployment proof
+
+- `azd up --no-prompt` initially failed because the Key Vault template explicitly set `enablePurgeProtection: false`, which the target Azure environment rejected.
+- Updated `infra/resources.bicep` to omit the explicit false purge-protection setting and reran validation/deployment.
+- `az bicep build --file infra\main.bicep` passed after the Key Vault fix.
+- `azd up --no-prompt` completed successfully in subscription `51eb709f-8958-49c4-a547-ebdbd4bf66dc`, region `eastus2`, environment `dev`.
+- Resource group: `rg-dev-fsirag`.
+- Container App endpoint: `https://ca-fsirag-gjbwsv.whitecoast-575f31b7.eastus2.azurecontainerapps.io`.
+- `azd show` listed the deployed `api` service endpoint.
+- `GET /health` returned HTTP 200 with telemetry configuration.
+- `POST /chat` with "What should I do if my card is lost?" returned a grounded synthetic FSI answer with source snippets.
