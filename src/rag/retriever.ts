@@ -84,12 +84,17 @@ export function retrieveContext(query: string, topK = 3): RetrievedSource[] {
 
 export function answerFromSources(query: string, sources: RetrievedSource[], caseStatus?: CaseStatusResult): string {
   const lowerQuery = query.toLowerCase();
+  const asksForPrivateData =
+    /\bbalance\b/.test(lowerQuery) ||
+    /customer(?:'s)?\s+(?:account|balance|number|record|records)/.test(lowerQuery) ||
+    /(?:account|card)\s+number/.test(lowerQuery) ||
+    /private\s+(?:data|record|records|details)/.test(lowerQuery);
 
   if (caseStatus) {
     return `${caseStatus.summary} This is synthetic case data for the demo only.`;
   }
 
-  if (lowerQuery.includes("balance") || lowerQuery.includes("customer")) {
+  if (asksForPrivateData) {
     return "I cannot reveal, invent, or infer customer balances or private records. In this synthetic demo, I can only explain how a customer can securely view their own information through verified banking channels.";
   }
 

@@ -41,6 +41,12 @@ async function postPrompt(prompt: string): Promise<void> {
 }
 
 for (const prompt of prompts) {
-  await postPrompt(prompt);
+  try {
+    await postPrompt(prompt);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    console.error(`\n[ERROR] ${prompt}`);
+    console.error(message);
+  }
 }
 

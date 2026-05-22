@@ -74,8 +74,8 @@ dependencies
 dependencies
 | where timestamp > ago(24h)
 | where tostring(customDimensions["gen_ai.tool.name"]) == "get_case_status"
-| where tostring(customDimensions["gen_ai.tool.call.arguments"]) has "SLOW-500"
-   or tostring(customDimensions["fsi.demo.tool.name"]) == "get_case_status"
+| where (tostring(customDimensions["gen_ai.tool.call.arguments"]) has "SLOW-500"
+    or tostring(customDimensions["fsi.demo.tool.name"]) == "get_case_status")
 | project timestamp, duration, success, resultCode, operation_Id, customDimensions
 | order by timestamp desc
 ```

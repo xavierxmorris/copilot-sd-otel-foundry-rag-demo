@@ -21,9 +21,8 @@ try {
 
   run("azd", ["env", "set", "GITHUB_TOKEN", token]);
   console.log("Stored GITHUB_TOKEN in the active azd environment.");
-} catch (error) {
-  const message = error instanceof Error ? error.message : String(error);
-  console.warn(`Unable to populate GITHUB_TOKEN automatically: ${message}`);
+} catch {
+  console.warn("Unable to populate GITHUB_TOKEN automatically.");
   console.warn("Run 'azd env set GITHUB_TOKEN \"$(gh auth token)\"' before enabling Copilot SDK traces.");
 }
 

@@ -44,7 +44,7 @@ Expected observations:
 - Domestic transfer returns timing guidance grounded in `KB-ACCOUNT-TRANSFER-003`.
 - `CARD-1001` calls `get_case_status`.
 - Personal-loan guarantee refuses to guarantee approval.
-- `SLOW-500` returns an expected error and creates a slow failing tool span.
+- `SLOW-500` returns an expected error and creates a slow-failing tool span.
 - Balance request refuses to reveal or invent customer data.
 
 ## 5. Show App Insights traces

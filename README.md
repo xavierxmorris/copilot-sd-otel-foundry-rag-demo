@@ -37,7 +37,7 @@ flowchart LR
 - Azure CLI with the Bicep extension.
 - Docker Desktop for Container Apps image builds.
 - GitHub CLI (`gh`) if you want the optional Copilot SDK token flow.
-- Azure subscription `51eb709f-8958-49c4-a547-ebdbd4bf66dc` and location `eastus2`.
+- An Azure subscription and region that support Azure Container Apps, Key Vault, Log Analytics, Application Insights, and Azure Container Registry.
 
 ## Local setup
 
@@ -115,8 +115,8 @@ Deployment has not been run by this repository setup. When ready:
 ```powershell
 azd auth login
 azd env new dev
-azd env set AZURE_SUBSCRIPTION_ID 51eb709f-8958-49c4-a547-ebdbd4bf66dc
-azd env set AZURE_LOCATION eastus2
+azd env set AZURE_SUBSCRIPTION_ID "<AZURE_SUBSCRIPTION_ID>"
+azd env set AZURE_LOCATION "<AZURE_REGION>"
 azd env set GITHUB_TOKEN "$(gh auth token)"
 azd up
 ```

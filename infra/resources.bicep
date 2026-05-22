@@ -13,6 +13,7 @@ param tags object = {}
 param githubToken string = ''
 
 param apiImageName string = ''
+param githubCredentialExpiresOn string = dateTimeAdd(utcNow(), 'P90D')
 
 var suffix = take(uniqueString(subscription().id, resourceGroup().id, environmentName), 6)
 var effectiveApiImageName = empty(apiImageName) ? 'mcr.microsoft.com/azuredocs/containerapps-helloworld:latest' : apiImageName
@@ -132,8 +133,17 @@ resource keyVaultSecretsAssignment 'Microsoft.Authorization/roleAssignments@2022
 resource githubTokenSecret 'Microsoft.KeyVault/vaults/secrets@2023-07-01' = {
   parent: keyVault
   name: 'github-token'
+  tags: union(tags, {
+    rotation: '90d'
+    rotationContact: 'azd environment owner'
+  })
   properties: {
     value: empty(githubToken) ? 'not-configured' : githubToken
+    contentType: 'GitHub token for optional Copilot SDK trace probe'
+    attributes: {
+      enabled: true
+      exp: dateTimeToEpoch(githubCredentialExpiresOn)
+    }
   }
 }
 

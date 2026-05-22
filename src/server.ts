@@ -37,7 +37,8 @@ const errorHandler: ErrorRequestHandler = (error, _req, res, _next) => {
 
 app.use(errorHandler);
 
-const port = Number(process.env.PORT ?? 3000);
+const parsedPort = Number(process.env.PORT ?? 3000);
+const port = Number.isInteger(parsedPort) && parsedPort > 0 ? parsedPort : 3000;
 
 app.listen(port, () => {
   console.log(`FSI RAG demo API listening on port ${port}`);

@@ -8,7 +8,7 @@ Prepare a greenfield TypeScript/Express financial-services RAG-style Q&A demo fo
 
 ## Azure context
 
-- Subscription: `51eb709f-8958-49c4-a547-ebdbd4bf66dc`
+- Subscription: `<subscription-id>`
 - Region: `eastus2`
 - Environment: `dev`
 - Deployment recipe: AZD + Bicep
@@ -105,14 +105,14 @@ Prepare a greenfield TypeScript/Express financial-services RAG-style Q&A demo fo
 - `npm audit --omit=dev` passed with 0 vulnerabilities after pinning the Azure Monitor distro line and adding a targeted protobuf override for the vulnerable OTLP transformer transitive dependency.
 - `az bicep build --file infra\main.bicep` passed.
 - `docker info` confirmed Docker is available, and `docker build -t copilot-sd-otel-foundry-rag-demo:local .` passed.
-- `azd auth login --check-status` passed for `xaviermorris@MngEnvMCAP200728.onmicrosoft.com`.
-- `az account show` confirmed subscription `51eb709f-8958-49c4-a547-ebdbd4bf66dc`.
-- `azd env new dev --subscription 51eb709f-8958-49c4-a547-ebdbd4bf66dc --location eastus2 --no-prompt` created the requested `dev` environment.
-- `azd env get-values` confirmed `AZURE_ENV_NAME=dev`, `AZURE_SUBSCRIPTION_ID=51eb709f-8958-49c4-a547-ebdbd4bf66dc`, and `AZURE_LOCATION=eastus2`.
+- `azd auth login --check-status` passed for `<user-email>`.
+- `az account show` confirmed subscription `<subscription-id>`.
+- `azd env new dev --subscription <subscription-id> --location eastus2 --no-prompt` created the requested `dev` environment.
+- `azd env get-values` confirmed `AZURE_ENV_NAME=dev`, `AZURE_SUBSCRIPTION_ID=<subscription-id>`, and `AZURE_LOCATION=eastus2`.
 - `azd provision --preview --no-prompt` passed and generated a no-deploy preview for the resource group, Container App, Container Apps Environment, ACR, Application Insights, Key Vault, and Log Analytics workspace.
 - `azd package --no-prompt` passed and produced the `api` service container image package.
 - `az account list-locations` confirmed `eastus2` is available in the active Azure account.
-- `az policy assignment list --scope /subscriptions/51eb709f-8958-49c4-a547-ebdbd4bf66dc` returned 3 policy assignments for the target subscription scope; no policy deployment was attempted during validation.
+- `az policy assignment list --scope /subscriptions/<subscription-id>` returned 3 policy assignments for the target subscription scope; no policy deployment was attempted during validation.
 - Local API smoke checks passed:
   - `GET /health`
   - `npm run seed:demo`, including expected `SLOW-500` HTTP 500 demo error path.
@@ -123,7 +123,7 @@ Prepare a greenfield TypeScript/Express financial-services RAG-style Q&A demo fo
 - Updated `infra/resources.bicep` to omit the explicit false purge-protection setting and reran validation/deployment.
 - `az bicep build --file infra\main.bicep` passed after the Key Vault fix.
 - A subsequent `azd up --no-prompt` attempt hit `DeploymentActive` while the previous ARM deployment was still running. I waited for `resources-dev-fsirag` to finish, and it reached `Succeeded`.
-- `azd deploy --no-prompt` then deployed the API container image successfully in subscription `51eb709f-8958-49c4-a547-ebdbd4bf66dc`, region `eastus2`, environment `dev`.
+- `azd deploy --no-prompt` then deployed the API container image successfully in subscription `<subscription-id>`, region `eastus2`, environment `dev`.
 - Resource group: `rg-dev-fsirag`.
 - Container App endpoint: `https://ca-fsirag-gjbwsv.whitecoast-575f31b7.eastus2.azurecontainerapps.io`.
 - `azd show` listed the deployed `api` service endpoint.

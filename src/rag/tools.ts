@@ -1,4 +1,4 @@
-import { context as otelContext, propagation, SpanKind, SpanStatusCode } from "@opentelemetry/api";
+import { context as otelContext, propagation, SpanKind, SpanStatusCode, trace as otelTrace } from "@opentelemetry/api";
 import { z } from "zod";
 
 import { tracer, toolDurationHistogram, shouldCaptureContent } from "../telemetry.js";
@@ -19,6 +19,11 @@ const caseStatusArgsSchema = z.object({
 });
 
 function invocationContext(invocation?: ToolInvocation) {
+  const activeContext = otelContext.active();
+  if (otelTrace.getSpan(activeContext)) {
+    return activeContext;
+  }
+
   const carrier: Record<string, string> = {};
   if (invocation?.traceparent) {
     carrier.traceparent = invocation.traceparent;
@@ -27,7 +32,7 @@ function invocationContext(invocation?: ToolInvocation) {
     carrier.tracestate = invocation.tracestate;
   }
 
-  return Object.keys(carrier).length > 0 ? propagation.extract(otelContext.active(), carrier) : otelContext.active();
+  return Object.keys(carrier).length > 0 ? propagation.extract(activeContext, carrier) : activeContext;
 }
 
 async function withToolSpan<T>(
