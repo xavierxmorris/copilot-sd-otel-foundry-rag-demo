@@ -17,6 +17,7 @@ export function getCopilotTelemetryConfig() {
 export function getCopilotClient(): CopilotClient {
   if (!client) {
     client = new CopilotClient({
+      gitHubToken: process.env.GITHUB_TOKEN,
       telemetry: getCopilotTelemetryConfig(),
       onGetTraceContext: () => {
         const carrier: Record<string, string> = {};

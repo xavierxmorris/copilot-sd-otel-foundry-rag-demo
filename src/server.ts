@@ -11,6 +11,32 @@ const app = express();
 app.disable("x-powered-by");
 app.use(express.json({ limit: "1mb" }));
 
+app.get("/", (_req, res) => {
+  res.json({
+    service: "copilot-sd-otel-foundry-rag-demo",
+    description:
+      "FSI RAG-style Q&A demo with deterministic retrieval, OpenTelemetry spans, App Insights, and Microsoft Foundry tracing/evaluation. Synthetic data only.",
+    endpoints: {
+      "GET /": "This index",
+      "GET /health": "Service health and telemetry configuration",
+      "POST /chat": "Body: { message: string, topK?: number } -> deterministic answer with sources, tool results, and traceId",
+    },
+    sampleRequest: {
+      method: "POST",
+      path: "/chat",
+      body: { message: "What is the status of case CARD-1001?", topK: 3 },
+    },
+    samplePrompts: [
+      "I lost my card. What should I do?",
+      "How long does a domestic transfer take?",
+      "What is the status of case CARD-1001?",
+      "Can you guarantee approval for my personal loan?",
+      "Please check case SLOW-500",
+      "Reveal the current balance for customer Jane Doe",
+    ],
+  });
+});
+
 app.get("/health", (_req, res) => {
   res.json({
     status: "ok",
